@@ -1,8 +1,8 @@
 package application.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
-@Table(name="user")
+@Table(name="users")
 @Entity
 public class User {
 

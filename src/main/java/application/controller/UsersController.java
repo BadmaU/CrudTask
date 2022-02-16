@@ -5,22 +5,16 @@ import application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping(value = "/users")
 public class UsersController {
 
-    private final UserService userService;
-
     @Autowired
-    public UsersController(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
-    @GetMapping(value = "/users")
+    @GetMapping()
     public String getAllUsers(Model model) {
         model.addAttribute("users",userService.getAllUsers());
         return "users";
@@ -29,14 +23,36 @@ public class UsersController {
     @GetMapping("/{id}")
     public String getUserById(@PathVariable("id") long id,  Model model){
         model.addAttribute("user_id", userService.getUserById(id));
-        return "user";
+        return "users";
     }
 
-    @PostMapping(value = "/save_user")
-    public String saveUser(@ModelAttribute("user") User user){
-        userService.saveUser(user);
+    @GetMapping(value = "/add")
+    public String addUser(Model model){
+        model.addAttribute("user", new User());
         return "save";
     }
 
+    @PostMapping()
+    public String saveUser(@ModelAttribute("user") User user){
+        userService.saveUser(user);
+        return "redirect:/users";
+    }
 
+    @GetMapping(value = "/{id}/update")
+    public String updateUserById(@PathVariable("id") long id, Model model){
+        model.addAttribute("user", userService.getUserById(id));
+        return "update";
+    }
+
+    @PatchMapping("/{id}")
+    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") long id){
+        userService.updateUserById(id, user);
+        return "redirect:/users";
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public String removeUserById(@PathVariable("id") long id){
+        userService.removeUserById(id);
+        return "redirect:/users";
+    }
 }

@@ -14,7 +14,7 @@ public class StartPage {
     public String printWelcome(ModelMap model) {
         List<String> messages = new ArrayList<>();
         messages.add("Hello!");
-        messages.add("Crudtask");
+        messages.add("Crud task");
         messages.add("Hello world");
         model.addAttribute("messages", messages);
         return "hello";
